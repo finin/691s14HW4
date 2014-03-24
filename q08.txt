@@ -1,0 +1,10 @@
+# List universities and the nunber of presidents or chancellors of US
+# Universities that attended them
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbpr: <http://dbpedia.org/resource/>
+PREFIX dbpo: <http://dbpedia.org/ontology/>
+PREFIX dbpprop: <http://dbpedia.org/property/>
+SELECT * WHERE {?S ?P ?O } LIMIT 1
+
