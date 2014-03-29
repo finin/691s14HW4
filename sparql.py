@@ -29,14 +29,15 @@ def ask_query(query, endpoint=default_endpoint, format=default_format):
 
 def json2html(data):
     """ Constructs an HTML table string from a json object resulting from a sparql query"""
-    html = '<table border="1">'
+    html = ''
     if 'head' in data:
         # the json is from a select sparql query
         vars = data['head']['vars']
-        html = '<table  border="1"><thead><tr>' + ''.join(['<th> %s </th>' % var for var in vars]) + '</tr></thead><tbody>'
+        html = '<thead><tr>' + ''.join(['<th> %s </th>' % v for v in vars]) + '</tr></thead><tbody>'
+        html = html.encode('utf-8')
         for result in data['results']['bindings']:
-            html += '<tr>' + ''.join(['<td>%s</td>' % (linkify(result.get(var,{}).get('value', '')),) for var in vars]) + '</tr>'
-        html += '</tr></tbody>'
+            html += '<tr>' + ''.join(['<td>'+linkify(result.get(v,{}).get('value', ''))+'</td>' for v in vars]) + '</tr>'
+        html += '</tbody>'
     else:
         # the json is from a construct sparql query
         for (s, po) in data.items():
@@ -44,11 +45,12 @@ def json2html(data):
                 for o in objs:
                     html += '<tr><td>%s</td><td>%s</td><td>%s</td></tr>' % (linkify(s), linkify(p), linkify(o['value']))
 
-    return html + '</table>'
+    return '<table border="1">' + html + '</table>'
 
 def linkify(string):
     """ if string looks like a URI, turn it into a link """
-    return '<a href="%s">%s</a>' % (string, string) if string.startswith('http://') else string
+    result = '<a href="%s">%s</a>' % (string, string) if string.startswith('http://') else string
+    return result.encode('utf-8')
 
         
 def output(file, endpoint):
